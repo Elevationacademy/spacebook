@@ -17,6 +17,7 @@ var SpacebookApp = function () {
       }
     }
   }
+  
 
   var createPost = function (text) {
     var post = {
