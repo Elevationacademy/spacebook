@@ -11,9 +11,9 @@
       // initiate post
       var post = {
          text: input,
-         id: id
+         id: id,
+         comments: []
       };
-
       posts.push(post);
    };
 
@@ -34,20 +34,18 @@
       });
    }
 
-   function writeComment($userName, $input, $submit) {
+   function writeComment($userName, $input, $submit, id) {
       var comment = {
          user: '',
-         text: ''
+         text: '',
       }
 
       $submit.on('click', function () {
          comment.user =  $userName.val();
          comment.text =  $input.val();
          $input.parent().remove();
-         // return comment;
       });
-
-      return comment;
+      posts[id].comments.push(comment);
    }
 
    // add post event
@@ -73,19 +71,22 @@
 
    // add comment
    $('ul').on('click','.add-comment', function (e) {
-      var $ul = $('<ul></ul>'),
+      var $ul = $('<ul class="list-unstyled"></ul>'),
             $li = $('<li></li>'),
             $span = ('<span></span>'),
             $form = $('<form></form>'),
             $userName = $('<input type="text"></input>'),
             $input = $('<input type="text"></input>'),
-            $submit = $('<input type="submit" value="Submit"></input>');
+            $submit = $('<input type="submit" value="Submit"></input>'),
+            id = $(this).parent().data().id;
 
-      $(this).parent().append($form);
+      $(this).parent().append($form,$ul);
       $form.append($userName, $input, $submit);
-      var comment = writeComment($userName, $input, $submit);
-      console.log(comment);
+      // var comment = writeComment($userName, $input, $submit);
+      console.log($(this).parent().data().id);
 
+      writeComment($userName, $input, $submit, id);
+      // $ul.append($li.append($($span).html('User: ' + comment.user + 'writes a comment: ' + comment.text)));
    });
 
 
