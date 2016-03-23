@@ -86,7 +86,7 @@
       console.log($(this).parent().data().id);
 
       writeComment($userName, $input, $submit, id);
-      // $ul.append($li.append($($span).html('User: ' + comment.user + 'writes a comment: ' + comment.text)));
+      $ul.append($li.append($($span).html('User: ' + posts[id]comments.user + 'writes a comment: ' + posts[id].comments.text)));
    });
 
 
