@@ -34,9 +34,20 @@
       });
    }
 
-   function writeComment($label, $input, $submit) {
+   function writeComment($userName, $input, $submit) {
+      var comment = {
+         user: '',
+         text: ''
+      }
 
+      $submit.on('click', function () {
+         comment.user =  $userName.val();
+         comment.text =  $input.val();
+         $input.parent().remove();
+         // return comment;
+      });
 
+      return comment;
    }
 
    // add post event
@@ -68,19 +79,13 @@
             $form = $('<form></form>'),
             $userName = $('<input type="text"></input>'),
             $input = $('<input type="text"></input>'),
-            $submit = $('<input type="submit" value="Submit"></input>'),
+            $submit = $('<input type="submit" value="Submit"></input>');
 
-      console.log($(this).parent().has('form').length);
+      $(this).parent().append($form);
+      $form.append($userName, $input, $submit);
+      var comment = writeComment($userName, $input, $submit);
+      console.log(comment);
 
-      if($(this).parent().has('form').length) {
-            $form.append($userName, $input, $submit);
-            writeComment($userName, $input, $submit);
-      } else {
-         $(this).parent().append($form);
-         $form.append($userName, $input, $submit);
-         console.log($(this).parent().has('form'));
-         writeComment($userName, $input, $submit);
-      }
    });
 
 
