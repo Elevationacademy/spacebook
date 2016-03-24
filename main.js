@@ -9,12 +9,12 @@ var SpacebookApp = function () {
          { text: "Man3, this is a comment!"}
       ]
    },
-    {text: "Hello world", id: 0, comments:[
+    {text: "Hello world", id: 1, comments:[
       { text: "Man, this is a comment!"},
       { text: "Man, this is a comment!"},
       { text: "Man, this is a comment!"}
     ]},
-    {text: "Hello world", id: 0, comments:[
+    {text: "Hello world", id: 2, comments:[
       { text: "Man, this is a comment!"},
       { text: "Man, this is a comment!"},
       { text: "Man, this is a comment!"}
@@ -33,7 +33,7 @@ var SpacebookApp = function () {
     for (var i = 0; i < posts.length; i += 1) {
       var post = posts[i];
 
-      var commentsContainer = '<div class="comments-container">' +
+      var commentsContainer = '<div class="comments-container">' + '<div class="comments-list"></div>' +
       '<input type="text" class="comment-name">' +
       '<button class="btn btn-primary add-comment">Post Comment</button> </div>';
 
@@ -62,27 +62,22 @@ var SpacebookApp = function () {
 
 
    var renderComments = function () {
-      // removing elements and start rendering anew each element again
-      $('.comments-container').append('<div class="comments-list"></div>')
-      $('.comments-container p').empty();
-      console.log(posts);
-      $.each(posts, function (i, v) {
-         $.each(v.comments, function (idx, val) {
-            console.log($('.comments-list').eq(0));
-            $('.comments-list').eq(i).append( '<p>' + val.text + '<button class="btn btn-danger remove-comment">Remove</button></p>');
-         });
+    // removing elements and start rendering anew each element again
+    $('.comments-list').empty();
+
+    $(posts).map(function (idx) {
+      $(this.comments).map(function () {
+        $('.comments-list').eq(idx).append('<p>' + this.text + '<button class="btn btn-danger remove-comment">Remove</button></p>');
       });
+    });
   };
 
   var removeComment  = function (currentPost) {
      var index = $(currentPost).closest('.post').index();
-     var comment_idx = $(currentPost).closest('.comments-list').index();
-     console.log($(currentPost).parent());
-
-     console.log(index, comment_idx);
-
-   //   posts[index].comments.splice(comment_idx, 1);
-   //   $(currentPost).parent().remove();
+     var comment_idx = $(currentPost).parent().index();
+    //  console.log(index, comment_idx);
+     posts[index].comments.splice(comment_idx, 1);
+     $(currentPost).parent().remove();
   };
 
   var toggleComments = function (currentPost) {
@@ -113,7 +108,7 @@ $('.add-post').on('click', function (e) {
 
   var text = $('#post-name').val();
   app.createPost(text);
-  app.renderPosts();
+
 });
 
 $('.posts').on('click', '.remove', function (e) {
@@ -143,4 +138,5 @@ $('.posts').on( 'click', '.remove-comment', function (e) {
 $('.posts').on('click', '.show-comments', function (e) {
       e.preventDefault();
       app.toggleComments(this);
+
 });
