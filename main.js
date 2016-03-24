@@ -1,16 +1,16 @@
 var SpacebookApp = function () {
   var posts = [
-    {text: "Hello world 1", id: 0, comments:[
+    {text: "Hello world 1", comments:[
       { text: "Man, this is a comment!"},
       { text: "Man, this is a comment!"},
       { text: "Man, this is a comment!"}
     ]},
-    {text: "Hello world 2", id: 0, comments:[
+    {text: "Hello world 2", comments:[
       { text: "Man, this is a comment!"},
       { text: "Man, this is a comment!"},
       { text: "Man, this is a comment!"}
     ]},
-    {text: "Hello world 3", id: 0, comments:[
+    {text: "Hello world 3", comments:[
       { text: "Man, this is a comment!"},
       { text: "Man, this is a comment!"},
       { text: "Man, this is a comment!"}
@@ -36,6 +36,22 @@ var SpacebookApp = function () {
       $posts.append('<div class="post">'
         + '<a href="#" class="remove">remove</a> ' + '<a href="#" class="show-comments">comments</a> ' + post.text +
         commentsContainer + '</div>');
+    }
+  }
+
+  var renderComments = function () {
+    $('.comments-list').empty();
+
+    for (var i = 0; i < posts.length; i += 1) {
+      var post = posts[i];
+      var index = posts.indexOf(post);
+      var $post = $('.posts').find('.post').eq(index);
+
+      for (var i = 0; i < post.comments.length; i += 1) {
+        var comment = post.comments[i];
+
+        $post.find('.comments-list').append('<div class="comment">' + comment.text + '</div>');
+      }
     }
   }
 
@@ -68,7 +84,7 @@ var SpacebookApp = function () {
     createComment: createComment,
 
     // TODO: Implement
-    // renderComments: renderComments,
+    renderComments: renderComments,
 
     // TODO: Implement
     // removeComment: removeComment,
@@ -80,6 +96,7 @@ var app = SpacebookApp();
 
 // immediately invoke the render method
 app.renderPosts();
+app.renderComments();
 
 // Events
 $('.add-post').on('click', function (e) {
