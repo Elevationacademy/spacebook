@@ -30,7 +30,7 @@ var SpacebookApp = function () {
       var post = posts[i];
 
       var commentsContainer = '<div class="comments-container">' + '<div class=comments-list></div>' +
-      '<input type="text" id="comment-name">' +
+      '<input type="text" class="comment-name">' +
       '<button class="btn btn-primary add-comment">Post Comment</button> </div>';
 
       $posts.append('<div class="post">'
@@ -47,8 +47,8 @@ var SpacebookApp = function () {
       var index = posts.indexOf(post);
       var $post = $('.posts').find('.post').eq(index);
 
-      for (var i = 0; i < post.comments.length; i += 1) {
-        var comment = post.comments[i];
+      for (var j = 0; j < post.comments.length; j += 1) {
+        var comment = post.comments[j];
 
         $post.find('.comments-list').append('<div class="comment">' + comment.text + '</div>');
       }
@@ -116,8 +116,9 @@ $('.posts').on('click', '.show-comments', function () {
 });
 
 $('.posts').on('click', '.add-comment', function () {
-  var text = $(this).siblings('#comment-name').val();
+  var text = $(this).siblings('.comment-name').val();
   var postIndex = $(this).closest('.post').index();
 
   app.createComment(text, postIndex);
+  app.renderComments();
 });
