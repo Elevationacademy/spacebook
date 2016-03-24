@@ -50,10 +50,14 @@ var SpacebookApp = function () {
       for (var j = 0; j < post.comments.length; j += 1) {
         var comment = post.comments[j];
 
-        $post.find('.comments-list').append('<div class="comment">' + comment.text + '</div>');
-      }
-    }
-  }
+        $post.find('.comments-list').append(
+          '<div class="comment">' + comment.text + 
+          '<button class="btn btn-danger remove-comment">Remove Comment</button>' +
+          '</div>'
+        );
+      };
+    };
+  };
 
   var removePost = function (currentPost) {
     var $clickedPost = $(currentPost).closest('.post');
@@ -75,19 +79,25 @@ var SpacebookApp = function () {
     posts[postIndex].comments.push(comment);
   }
 
+  var removeComment = function (currentComment) {
+    var $clickedComment = $(currentComment).closest('.comment');
+
+    var commentIndex = $clickedComment.index();
+    var postIndex = $clickedComment.closest('.post').index();
+
+    $clickedComment.remove();
+
+    posts[postIndex].comments.splice(commentIndex, 1);
+  }
+
   return {
     createPost: createPost,
     renderPosts: renderPosts,
     removePost: removePost,
 
-    // TODO: Implement
     createComment: createComment,
-
-    // TODO: Implement
     renderComments: renderComments,
-
-    // TODO: Implement
-    // removeComment: removeComment,
+    removeComment: removeComment,
     toggleComments: toggleComments
   }
 }
@@ -121,4 +131,8 @@ $('.posts').on('click', '.add-comment', function () {
 
   app.createComment(text, postIndex);
   app.renderComments();
+});
+
+$('.posts').on('click', '.remove-comment', function () {
+  app.removeComment(this);
 });
