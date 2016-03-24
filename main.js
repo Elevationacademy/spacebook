@@ -1,10 +1,14 @@
 var SpacebookApp = function () {
   var posts = [
-    {text: "Hello world", id: 0, comments:[
-      { text: "Man, this is a comment!"},
-      { text: "Man, this is a comment!"},
-      { text: "Man, this is a comment!"}
-    ]},
+    {
+      text: "Hello world",
+      id: 0,
+      comments: [
+         { text: "Man1, this is a comment!"},
+         { text: "Man2, this is a comment!"},
+         { text: "Man3, this is a comment!"}
+      ]
+   },
     {text: "Hello world", id: 0, comments:[
       { text: "Man, this is a comment!"},
       { text: "Man, this is a comment!"},
@@ -48,24 +52,48 @@ var SpacebookApp = function () {
     $clickedPost.remove();
   }
 
+  var createComment = function (text, currentPost) {
+     var comment = {
+        text: text
+     };
+     var idx = $(currentPost).closest('.post').index();
+     posts[idx].comments.push(comment);
+  };
+
+
+   var renderComments = function () {
+      // removing elements and start rendering anew each element again
+      $('.post p').empty();
+      $.each(posts, function (i, v) {
+         $.each(v.comments, function (idx, val) {
+            $('.post').eq(i).append( '<p>' + val.text + '<button class="btn btn-danger remove-comment">Remove</button><p>');
+         });
+      });
+  };
+
+  var removeComment  = function (currentPost) {
+     var index = $(currentPost).closest('.post').index();
+     console.log(index);
+     var comment = posts[index].comments;
+
+     console.log(comment);
+
+   //   post.comments.splice(posts.comments.indexOf(post), 1);
+   //   $clickedPost.remove();
+  };
+
   var toggleComments = function (currentPost) {
     var $clickedPost = $(currentPost).closest('.post');
     $clickedPost.find('.comments-container').toggleClass('show');
   }
 
   return {
-    createPost: createPost,
+     createPost: createPost,
     renderPosts: renderPosts,
     removePost: removePost,
-
-    // TODO: Implement
-    // createComment: createComment,
-
-    // TODO: Implement
-    // renderComments: renderComments,
-
-    // TODO: Implement
-    // removeComment: removeComment,
+    createComment: createComment,
+    renderComments: renderComments,
+    removeComment: removeComment,
     toggleComments: toggleComments
   }
 }
@@ -74,6 +102,7 @@ var app = SpacebookApp();
 
 // immediately invoke the render method
 app.renderPosts();
+app.renderComments();
 
 // Events
 $('.add-post').on('click', function (e) {
@@ -86,6 +115,22 @@ $('.add-post').on('click', function (e) {
 
 $('.posts').on('click', '.remove', function () {
   app.removePost(this);
+});
+
+$('.posts').on('click', '.add-comment', function (e) {
+   e.preventDefault();
+   var text = $('#comment-name').val();
+   console.log(text);
+   app.createComment(text, this);
+   app.renderComments();
+});
+
+$('.posts').on('click', '.remove', function () {
+  app.removePost(this);
+});
+
+$('.posts').on( 'click', '.remove-comment', function () {
+  app.removeComment(this);
 });
 
 $('.posts').on('click', '.show-comments', function () {
