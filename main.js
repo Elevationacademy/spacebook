@@ -1,16 +1,16 @@
 var SpacebookApp = function () {
   var posts = [
-    {text: "Hello world", id: 0, comments:[
+    {text: "Hello world 1", id: 0, comments:[
       { text: "Man, this is a comment!"},
       { text: "Man, this is a comment!"},
       { text: "Man, this is a comment!"}
     ]},
-    {text: "Hello world", id: 0, comments:[
+    {text: "Hello world 2", id: 0, comments:[
       { text: "Man, this is a comment!"},
       { text: "Man, this is a comment!"},
       { text: "Man, this is a comment!"}
     ]},
-    {text: "Hello world", id: 0, comments:[
+    {text: "Hello world 3", id: 0, comments:[
       { text: "Man, this is a comment!"},
       { text: "Man, this is a comment!"},
       { text: "Man, this is a comment!"}
@@ -20,7 +20,7 @@ var SpacebookApp = function () {
   var $posts = $('.posts');
 
   var createPost = function (text) {
-    posts.push({ text: text });
+    posts.push({ text: text, comments: []});
   }
 
   var renderPosts = function () {
@@ -29,7 +29,7 @@ var SpacebookApp = function () {
     for (var i = 0; i < posts.length; i += 1) {
       var post = posts[i];
 
-      var commentsContainer = '<div class="comments-container">' +
+      var commentsContainer = '<div class="comments-container">' + '<div class=comments-list></div>' +
       '<input type="text" id="comment-name">' +
       '<button class="btn btn-primary add-comment">Post Comment</button> </div>';
 
@@ -53,13 +53,19 @@ var SpacebookApp = function () {
     $clickedPost.find('.comments-container').toggleClass('show');
   }
 
+  var createComment = function (text, postIndex) {
+    var comment = { text: text };
+
+    posts[postIndex].comments.push(comment);
+  }
+
   return {
     createPost: createPost,
     renderPosts: renderPosts,
     removePost: removePost,
 
     // TODO: Implement
-    // createComment: createComment,
+    createComment: createComment,
 
     // TODO: Implement
     // renderComments: renderComments,
@@ -90,4 +96,11 @@ $('.posts').on('click', '.remove', function () {
 
 $('.posts').on('click', '.show-comments', function () {
   app.toggleComments(this);
+});
+
+$('.posts').on('click', '.add-comment', function () {
+  var text = $(this).siblings('#comment-name').val();
+  var postIndex = $(this).closest('.post').index();
+
+  app.createComment(text, postIndex);
 });
