@@ -84,10 +84,10 @@ $('.add-post').on('click', function (e) {
   app.renderPosts();
 });
 
-$('.posts').delegate('.remove', 'click', function () {
+$('.posts').on('click', '.remove', function () {
   app.removePost(this);
 });
 
-$('.posts').delegate('.show-comments', 'click', function () {
+$('.posts').on('click', '.show-comments', function () {
   app.toggleComments(this);
 });
