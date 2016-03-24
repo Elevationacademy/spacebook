@@ -1,0 +1,17 @@
+<<<<<<< HEAD
+.comments-container {
+  display: none;
+}
+
+.show {
+  display: block;
+}
+=======
+.remove {
+   padding-right: 1rem;
+}
+
+.add-comment {
+   padding-left: 5rem;  
+}
+>>>>>>> master
