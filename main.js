@@ -23,6 +23,8 @@ var SpacebookApp = function () {
     posts.push({ text: text, comments: []});
   }
 
+  // Empty all the posts, then add them from the posts array along with our
+  // new comments HTML
   var renderPosts = function () {
     $posts.empty();
 
@@ -43,13 +45,22 @@ var SpacebookApp = function () {
     $('.comments-list').empty();
 
     for (var i = 0; i < posts.length; i += 1) {
+      // the current post in the iteration
       var post = posts[i];
+
+      // index of the current post in the posts array
       var index = posts.indexOf(post);
+
+      // finding the "post" element in the page that is equal to the
+      // current post we're iterating on
       var $post = $('.posts').find('.post').eq(index);
 
+      // iterate through each comment in our post's comments array
       for (var j = 0; j < post.comments.length; j += 1) {
+        // the current comment in the iteration
         var comment = post.comments[j];
 
+        // append the comment to the post we wanted to comment on
         $post.find('.comments-list').append(
           '<div class="comment">' + comment.text + 
           '<button class="btn btn-danger remove-comment">Remove Comment</button>' +
@@ -76,17 +87,24 @@ var SpacebookApp = function () {
   var createComment = function (text, postIndex) {
     var comment = { text: text };
 
+    // pushing the comment into the correct posts array
     posts[postIndex].comments.push(comment);
   }
 
-  var removeComment = function (currentComment) {
-    var $clickedComment = $(currentComment).closest('.comment');
+  var removeComment = function (commentButton) {
+    // the comment element that we're wanting to remove
+    var $clickedComment = $(commentButton).closest('.comment');
 
+    // index of the comment element on the page
     var commentIndex = $clickedComment.index();
+
+    // index of the post in the posts div that the comment belongs to
     var postIndex = $clickedComment.closest('.post').index();
 
+    // removing the comment from the page
     $clickedComment.remove();
 
+    // remove the comment from the comments array on the correct post object
     posts[postIndex].comments.splice(commentIndex, 1);
   }
 
@@ -127,6 +145,8 @@ $('.posts').on('click', '.show-comments', function () {
 
 $('.posts').on('click', '.add-comment', function () {
   var text = $(this).siblings('.comment-name').val();
+
+  // finding the index of the post in the page... will use it in #createComment
   var postIndex = $(this).closest('.post').index();
 
   app.createComment(text, postIndex);
