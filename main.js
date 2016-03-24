@@ -145,42 +145,25 @@ $('.posts').on('click', '.show-comments', function (e) {
 (function ($) {
    var posts = [];
 
+   var storage = {
+      // localStorage["posts4Save"] = JSON.stringify(posts);
+       // localStorage["posts4Save"] =  stored.push(JSON.stringify(posts));
+   }
+
    // adding new post
    var addPost = function (input, id) {
       // initiate post
       var post = {
          text: input,
-         id: id
+         id: id,
+         comments: []
       };
-
-      localStorage["posts4Save"] = JSON.stringify(posts);
-      console.log(localStorage["posts4Save"]);
-      // if (localStorage["posts4Save"].length === 0) {
-      //    localStorage["posts4Save"] = JSON.stringify(posts);
-      // }
-      // else {
-      //    var stored = JSON.stringify(posts);
-      //    console.log(stored);
-      //    // localStorage["posts4Save"] =  stored.push(JSON.stringify(posts));
-      // }
-
       posts.push(post);
-
-      // localStorage["posts4Save"] = JSON.stringify(posts);
    };
 
    function updatePost () {
       // $('.posts').find('ul').empty();
-      var storedData = JSON.parse(localStorage['posts4Save']);
-
-      // if (storedData) {
-      //    console.log(storedData);
-      //    posts = storedData;
-      //    getPostsToHtml(storedData);
-      // } else {
-         console.log(posts);
-         getPostsToHtml(posts);
-      // }
+      getPostsToHtml(posts);
    }
 
    function getPostsToHtml (data) {
@@ -193,6 +176,20 @@ $('.posts').on('click', '.show-comments', function (e) {
          $li.html('<a href="#" class="remove"><i class="fa fa-times"></i></a>' + v.text);
          $li.append('<a href="#" class="add-comment"><i class="fa fa-comment"></i></a>' );
       });
+   }
+
+   function writeComment($userName, $input, $submit, id) {
+      var comment = {
+         user: '',
+         text: '',
+      }
+
+      $submit.on('click', function () {
+         comment.user =  $userName.val();
+         comment.text =  $input.val();
+         $input.parent().remove();
+      });
+      posts[id].comments.push(comment);
    }
 
    // add post event
@@ -215,5 +212,28 @@ $('.posts').on('click', '.show-comments', function (e) {
       // removing element from array
       posts.splice($(this).parent().data().id, 1);
    });
+
+   // add comment
+   $('ul').on('click','.add-comment', function (e) {
+      var $ul = $('<ul class="list-unstyled"></ul>'),
+            $li = $('<li></li>'),
+            $span = ('<span></span>'),
+            $form = $('<form></form>'),
+            $userName = $('<input type="text"></input>'),
+            $input = $('<input type="text"></input>'),
+            $submit = $('<input type="submit" value="Submit"></input>'),
+            id = $(this).parent().data().id;
+
+      $(this).parent().append($form,$ul);
+      $form.append($userName, $input, $submit);
+      // var comment = writeComment($userName, $input, $submit);
+      console.log($(this).parent().data().id);
+
+      writeComment($userName, $input, $submit, id);
+      // $ul.append($li.append($($span).html('User: ' + comment.user + 'writes a comment: ' + comment.text)));
+   });
+
+
+
 })(jQuery);
 >>>>>>> master
