@@ -133,6 +133,7 @@ $('.add-post').on('click', function (e) {
   var text = $('#post-name').val();
   app.createPost(text);
   app.renderPosts();
+  app.renderComments();
 });
 
 $('.posts').on('click', '.remove', function () {
