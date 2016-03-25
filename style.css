@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 .comments-container {
   display: none;
 }
@@ -6,12 +5,20 @@
 .show {
   display: block;
 }
-=======
-.remove {
-   padding-right: 1rem;
+
+.fa {
+  font-size: 2rem;
 }
 
-.add-comment {
-   padding-left: 5rem;  
+.remove {
+  color: red;
 }
->>>>>>> master
+
+.post {
+  font-size: 1.6rem;
+}
+
+.add-comment,
+.remove-comment {
+   margin-left: 1.5rem;
+}
