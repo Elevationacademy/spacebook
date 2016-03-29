@@ -1,31 +1,38 @@
 var SpacebookApp = function () {
-  var posts = [
-    {text: "Hello world 1", comments:[
-      { text: "Man, this is a comment!"},
-      { text: "Man, this is a comment!"},
-      { text: "Man, this is a comment!"}
-    ]},
-    {text: "Hello world 2", comments:[
-      { text: "Man, this is a comment!"},
-      { text: "Man, this is a comment!"},
-      { text: "Man, this is a comment!"}
-    ]},
-    {text: "Hello world 3", comments:[
-      { text: "Man, this is a comment!"},
-      { text: "Man, this is a comment!"},
-      { text: "Man, this is a comment!"}
-    ]}
-  ];
+  var posts = [];
+
+  var STORAGE_ID = 'spacebook';
 
   var $posts = $('.posts');
 
+  var _saveToLocalStorage = function () {
+    localStorage.setItem(STORAGE_ID, JSON.stringify(posts));
+  }
+
+  var _getFromLocalStorage = function () {
+    return JSON.parse(localStorage.getItem(STORAGE_ID) || '[]');
+  }
+
+  var get = function () {
+    posts = _getFromLocalStorage().slice(0);
+  }
+
+  var addPostToStorage = function (post) {
+    posts.push(post);
+
+    _saveToLocalStorage(post);
+  }
+
   var createPost = function (text) {
     posts.push({ text: text, comments: []});
+    
+    _saveToLocalStorage();
   }
 
   // Empty all the posts, then add them from the posts array along with our
   // new comments HTML
   var renderPosts = function () {
+    get();
     $posts.empty();
 
     for (var i = 0; i < posts.length; i += 1) {
@@ -42,6 +49,7 @@ var SpacebookApp = function () {
   }
 
   var renderComments = function () {
+    get();
     $('.comments-list').empty();
 
     for (var i = 0; i < posts.length; i += 1) {
@@ -77,6 +85,8 @@ var SpacebookApp = function () {
 
     posts.splice(index, 1);
     $clickedPost.remove();
+
+    _saveToLocalStorage();
   }
 
   var toggleComments = function (currentPost) {
@@ -89,6 +99,7 @@ var SpacebookApp = function () {
 
     // pushing the comment into the correct posts array
     posts[postIndex].comments.push(comment);
+    _saveToLocalStorage();
   }
 
   var removeComment = function (commentButton) {
@@ -106,6 +117,8 @@ var SpacebookApp = function () {
 
     // remove the comment from the comments array on the correct post object
     posts[postIndex].comments.splice(commentIndex, 1);
+
+    _saveToLocalStorage();
   }
 
   return {
