@@ -1,58 +1,67 @@
 var SpacebookApp = function () {
-  var posts = [
-    {
-      text: "Hello world",
-      id: 0,
-      comments: [
-         { text: "Man1, this is a comment!"},
-         { text: "Man2, this is a comment!"},
-         { text: "Man3, this is a comment!"}
-      ]
-   },
-    {text: "Hello world", id: 1, comments:[
-      { text: "Man, this is a comment!"},
-      { text: "Man, this is a comment!"},
-      { text: "Man, this is a comment!"}
-    ]},
-    {text: "Hello world", id: 2, comments:[
-      { text: "Man, this is a comment!"},
-      { text: "Man, this is a comment!"},
-      { text: "Man, this is a comment!"}
-    ]}
-  ];
+   var storage = {
+      posts: [
+      //   {
+      //     text: "Hello world",
+      //     id: 0,
+      //     comments: [
+      //        { text: "Man1, this is a comment!"},
+      //        { text: "Man2, this is a comment!"},
+      //        { text: "Man3, this is a comment!"}
+      //     ]
+      //  }
+      ],
+      setter: function () {
+         localStorage.setItem('posts', JSON.stringify(this.posts));
+      },
+      getter: function () {
+         return this.posts = JSON.parse(localStorage.getItem('posts')) || [];
+      },
+      // for now I'm not using it
+      clearStorage: function() {
+         localStorage.clear('posts');
+      }
+   }
 
   var $posts = $('.posts');
 
   var createPost = function (text) {
+     storage.posts = storage.getter();
     var post = {
       text: text,
-      id: posts.length,
+      id: storage.posts.length,
       comments: []
     };
-    posts.push(post);
+
+    storage.posts.push(post);
+    storage.setter();
   }
 
   var renderPosts = function () {
     $posts.empty();
+    var posts = storage.getter();
 
     for (var i = 0; i < posts.length; i += 1) {
       var post = posts[i];
 
       var commentsContainer = '<div class="comments-container">' + '<div class="comments-list"></div>' +
       '<input type="text" class="comment-name">' +
-      '<button class="btn btn-primary add-comment"><i class="fa fa-plus"></i></button> </div>';
+      '<span class="btn btn-default add-comment"><i class="fa fa-plus"></i></button> </div>';
 
       $posts.append('<div class="post">'
         + '<a href="#" class="remove"><i class="fa fa-times"></i></a> ' + '<a href="#" class="show-comments"><i class="fa fa-comments"></i></a> ' + post.text +
         commentsContainer + '</div>');
     }
+
+    renderComments();
   }
 
   var removePost = function (currentPost) {
     var $clickedPost = $(currentPost).closest('.post');
-
     var index = $clickedPost.index();
+    var posts = storage.getter();
     posts.splice(index, 1);
+    storage.setter();
     $clickedPost.remove();
   }
 
@@ -61,15 +70,16 @@ var SpacebookApp = function () {
         text: text
      };
 
-     console.log(posts);
-     posts[idx].comments.push(comment);
+     storage.posts = storage.getter();
+     storage.posts[idx].comments.push(comment);
+     storage.setter();
   };
 
 
    var renderComments = function () {
     // removing elements and start rendering anew each element again
     $('.comments-list').empty();
-
+    var posts = storage.getter();
     $(posts).map(function (idx) {
       $(this.comments).map(function () {
         $('.comments-list').eq(idx).append('<p>' + this.text + '<button class="btn btn-danger remove-comment"><i class="fa fa-times"></i></a></button></p>');
@@ -80,7 +90,9 @@ var SpacebookApp = function () {
   var removeComment  = function (currentPost) {
      var index = $(currentPost).closest('.post').index();
      var comment_idx = $(currentPost).parent().index();
+     var posts = storage.getter();
      posts[index].comments.splice(comment_idx, 1);
+     storage.setter();
      $(currentPost).parent().remove();
   };
 
@@ -104,7 +116,7 @@ var app = SpacebookApp();
 
 // immediately invoke the render method
 app.renderPosts();
-app.renderComments();
+// app.renderComments();
 
 // Events
 $('.add-post').on('click', function (e) {
@@ -113,6 +125,7 @@ $('.add-post').on('click', function (e) {
   var text = $('#post-name').val();
   app.createPost(text);
   app.renderPosts();
+  $('#post-name').val('').focus();
 });
 
 $('.posts').on('click', '.remove', function (e) {
