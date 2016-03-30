@@ -5,11 +5,11 @@ var SpacebookApp = function () {
 
   var $posts = $('.posts');
 
-  var _saveToLocalStorage = function () {
+  var saveToLocalStorage = function () {
     localStorage.setItem(STORAGE_ID, JSON.stringify(posts));
   }
 
-  var _getFromLocalStorage = function () {
+  var getFromLocalStorage = function () {
     return JSON.parse(localStorage.getItem(STORAGE_ID) || '[]');
   }
 
@@ -20,13 +20,13 @@ var SpacebookApp = function () {
   var addPostToStorage = function (post) {
     posts.push(post);
 
-    _saveToLocalStorage(post);
+    saveToLocalStorage(post);
   }
 
   var createPost = function (text) {
     posts.push({ text: text, comments: []});
-    
-    _saveToLocalStorage();
+
+    saveToLocalStorage();
   }
 
   // Empty all the posts, then add them from the posts array along with our
@@ -86,7 +86,7 @@ var SpacebookApp = function () {
     posts.splice(index, 1);
     $clickedPost.remove();
 
-    _saveToLocalStorage();
+    saveToLocalStorage();
   }
 
   var toggleComments = function (currentPost) {
@@ -99,7 +99,7 @@ var SpacebookApp = function () {
 
     // pushing the comment into the correct posts array
     posts[postIndex].comments.push(comment);
-    _saveToLocalStorage();
+    saveToLocalStorage();
   }
 
   var removeComment = function (commentButton) {
