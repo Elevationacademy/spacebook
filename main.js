@@ -14,7 +14,7 @@ var SpacebookApp = function () {
   }
 
   var get = function () {
-    posts = _getFromLocalStorage().slice(0);
+    posts = getFromLocalStorage().slice(0);
   }
 
   var addPostToStorage = function (post) {
@@ -118,7 +118,7 @@ var SpacebookApp = function () {
     // remove the comment from the comments array on the correct post object
     posts[postIndex].comments.splice(commentIndex, 1);
 
-    _saveToLocalStorage();
+    saveToLocalStorage();
   }
 
   return {
