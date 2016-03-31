@@ -1,8 +1,6 @@
 var SpacebookApp = function () {
   var posts = [];
-
   var STORAGE_ID = 'spacebook';
-
   var $posts = $('.posts');
 
   var saveToLocalStorage = function () {
