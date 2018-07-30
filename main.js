@@ -63,7 +63,7 @@ var SpacebookApp = function () {
     var post = _findPostById(id);
 
     posts.splice(posts.indexOf(post), 1);
-    $clickedPost.remove();
+  
   }
 
   var toggleComments = function (currentPost) {
@@ -104,6 +104,8 @@ $('.add-post').on('click', function (e) {
 
 $('.posts').on('click', '.remove', function () {
   app.removePost(this);
+  
+  app.renderPosts();
 });
 
 $('.posts').on('click','.show-comments', function () {
